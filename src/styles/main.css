@@ -29,3 +29,97 @@ body {
   margin: 0 auto;
   padding: 0 20px;
 }
+
+.pin {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  gap: 5px;
+}
+
+.pin > span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 50px;
+  margin-bottom: 15px;
+  gap: 5px;
+}
+
+.task > span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.createTask-page {
+  /* min-height: 100vh; */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.createTask-page h2 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.createTask-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.createTask-form label {
+  font-weight: 500;
+}
+
+.createTask-form input,
+.createTask-form textarea,
+.createTask-form select {
+  border: none;
+  padding: 8px;
+  border-radius: 15px;
+  width: 100%;
+  background-color: white;
+}
+
+textarea {
+  resize: none;
+  height: 80px;
+}
+
+/* .submit-btn {
+  background: #0288d1;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  width: fit-content;
+  margin: 0 auto;
+} */
+
+.createBtn {
+  border-radius: 16px;
+  background-color: #4eceed;
+  color: var(--primary-text-color);
+  border: 2px solid var(--primary-text-color);
+  font-weight: 600;
+  /* width: 90px; */
+  /* height: 30px; */
+  font-size: medium;
+  padding: 5px 25px;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+}

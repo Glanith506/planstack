@@ -1,0 +1,138 @@
+.card {
+  padding: 12px 16px;
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 320px;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 6px;
+}
+
+.card-date,
+.card-status {
+  opacity: 0.85;
+}
+
+/* Colors */
+.red {
+  background-color: #f44336;
+}
+
+.orange {
+  background-color: #ff7043;
+}
+
+.gray {
+  background-color: #424242;
+}
+
+.blue {
+  background-color: #055d83;
+}
+
+/* Root overlay */
+.editCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Child popup card */
+.editCard-content {
+  background-color: #055d83;
+  border-radius: 8px;
+  padding: 15px 20px;
+  width: 400px; /* adjust as needed */
+  max-width: 90%; /* responsive */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.editCard-content h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.editCard-content label {
+  display: block;
+  font-weight: 500;
+  margin: 10px 0 5px;
+  color: #fff;
+}
+
+.editCard-content input,
+.editCard-content textarea,
+.editCard-content select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background-color: #dcdcdc;
+}
+
+.editCard-content textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+/* .editCard-content button {
+  margin-top: 15px;
+  background-color: #b8e0f2;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+} */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.editBtn {
+  color: var(--primary-text-color);
+  border-radius: 16px;
+  background-color: #ceefff;
+  padding: 5px 25px;
+  border: 2px solid var(--primary-text-color);
+  font-weight: 600;
+  font-size: 16px;
+  margin: 10px 0 5px;
+}
