@@ -4,11 +4,12 @@ import Home from "./pages/Home";
 import List from "./pages/ListAndEdit";
 import Create from "./pages/Create";
 import Profile from "./pages/Profile";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
     <Router>
-      {/* my logo and navbar */}
+      <Navbar/>
       <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
