@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // if you’re using react-router
+import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
