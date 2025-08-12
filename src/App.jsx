@@ -1,25 +1,40 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React from 'react'
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
 import Home from "./pages/Home";
 import List from "./pages/ListAndEdit";
 import Create from "./pages/Create";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-const App = () => {
+const AppContent = () => {
+  const location = useLocation();
+  const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
+
   return (
-    <Router>
-      <Navbar/>
+    <>
+      {!hideNavbar && <Navbar />}
       <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/list" element={<List />} />
           <Route path="/create" element={<Create />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
-    </Router>
-  )
-}
+    </>
+  );
+};
 
-export default App
+const App = () => {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
+};
+
+export default App;
