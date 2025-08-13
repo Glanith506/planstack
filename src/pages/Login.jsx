@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Logo from '../assets/logo.png'
 
 const Login = () => {
   return (
     <div className="login-page">
+      <img className="userCredLogo" src={Logo} alt="logo" />
       <div className="login-box">
         <h2>Login</h2>
         <form className="userF">

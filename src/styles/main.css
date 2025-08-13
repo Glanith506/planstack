@@ -131,6 +131,14 @@ textarea {
   align-items: center;
 }
 
+.userCredLogo {
+  height: 94px;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .login-box {
   background-color: white;
   padding: 30px;
@@ -197,4 +205,43 @@ textarea {
 
 .register-link a:hover {
   text-decoration: underline;
+}
+
+.userdetails {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.userdetails > img {
+  height: 102px;
+  margin-top: 50px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.userdetails > span {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.logBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 16px;
+  background-color: #4eceed;
+  color: var(--primary-text-color);
+  border: 2px solid var(--primary-text-color);
+  font-weight: 600;
+  /* width: 90px; */
+  height: 50px;
+  font-size: medium;
+  padding: 5px 25px;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
 }
