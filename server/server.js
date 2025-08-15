@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
+const taskRoutes = require("./routes/task");
 
 dotenv.config();
 connectDB();
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.get("/", (_req, res) => res.send("PlanStack API is running"));
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
 // Start
 const PORT = process.env.PORT || 5000;
