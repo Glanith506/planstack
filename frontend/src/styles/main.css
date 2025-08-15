@@ -245,3 +245,8 @@ textarea {
   margin-top: 10px;
   cursor: pointer;
 }
+
+.emptyText {
+  font-weight: 400;
+  color: var(--primary-text-color);
+}

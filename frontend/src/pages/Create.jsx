@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 const Create = () => {
 
@@ -19,30 +20,29 @@ const Create = () => {
     const taskData = { title, description, dueDate, priority };
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(taskData),
-      });
-
-      const data = await res.json();
-      console.log(data);
-
-      if (res.ok) {
-        alert("Task created successfully!");
-        setTitle("");
-        setDescription("");
-        setDueDate("");
-        setPriority("");
-      } else {
-        alert(data.message || "Failed to create task");
-      }
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/tasks`,
+        taskData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    
+      console.log(res.data);
+    
+      alert("Task created successfully!");
+      setTitle("");
+      setDescription("");
+      setDueDate("");
+      setPriority("");
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Error:", err.response?.data || err.message);
+      alert(err.response?.data?.message || "Failed to create task");
     }
+    
   };
 
 

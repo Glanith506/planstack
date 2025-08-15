@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/logo.png'
+import axios from 'axios'
 
 const Register = () => {
 
@@ -30,30 +31,26 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/register`,
+        {
           username: form.username,
           email: form.email,
           password: form.password,
-        }),
-      });
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Registration failed");
-        setLoading(false);
-        return;
-      }
-
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", res.data.token);
       navigate("/");
     } catch (err) {
       console.error(err);
-      setError("Something went wrong. Please try again.");
-    } finally {
+      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -64,7 +61,7 @@ const Register = () => {
       <div className="login-box">
         <h2>Register</h2>
         <form className="userF" onSubmit={handleSubmit}>
-        <div className="form-group">
+          <div className="form-group">
             <label>Username</label>
             <input
               name="username"

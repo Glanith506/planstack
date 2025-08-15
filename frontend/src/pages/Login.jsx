@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/logo.png'
+import axios from 'axios'
 
 const Login = () => {
 
@@ -12,24 +13,29 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/login`,
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-
-      localStorage.setItem("token", data.token);
-
+      localStorage.setItem("token", res.data.token);
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      if (err.response && err.response.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError(err.message);
+      }
     }
   };
+  
 
   return (
     <div className="login-page">

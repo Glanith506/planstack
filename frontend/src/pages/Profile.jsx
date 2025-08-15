@@ -2,6 +2,7 @@ import React from 'react'
 import UserImg from '../assets/userimg.png'
 import Logout from '../assets/logout.svg'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Profile = () => {
 
@@ -18,24 +19,22 @@ const Profile = () => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+  
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        if (!res.ok) throw new Error("Failed to fetch user");
-
-        const data = await res.json();
-        
-        setUsername(data.user.username);
+  
+        setUsername(res.data.user.username);
       } catch (err) {
-        console.error(err);
+        console.error(err.response?.data || err.message);
       }
     };
-
+  
     fetchUser();
   }, []);
+  
 
   return (
     <>
