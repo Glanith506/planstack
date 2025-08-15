@@ -8,20 +8,23 @@ const signToken = (userId) =>
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-
+    console.log("Register attempt:", { username, email, password });
     if (!username || !email || !password)
       return res.status(400).json({ message: "All fields are required." });
 
-    const existing = await User.findOne({ email });
+    const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) return res.status(409).json({ message: "Email already in use." });
 
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ username, email, password: hash });
+    console.log("Generated hash for password:", password, "is:", hash);
+    const user = await User.create({ username, email: email.toLowerCase(), password: hash });
+    console.log("Saved user:", user);
 
     const token = signToken(user._id);
-    res.status(201).json({ token, user });
+    const { password: _, ...userData } = user.toObject();
+    res.status(201).json({ token, user: userData });
   } catch (err) {
-    console.error(err);
+    console.error("Register error:", err);
     res.status(500).json({ message: "Server error." });
   }
 };
@@ -37,7 +40,10 @@ exports.login = async (req, res) => {
     if (!ok) return res.status(400).json({ message: "Invalid credentials." });
 
     const token = signToken(user._id);
-    res.json({ token, user: user.toJSON() });
+    // res.json({ token, user: user.toJSON() });
+    const { password: _, ...userData } = user.toObject();
+    res.json({ token, user: userData });
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error." });
