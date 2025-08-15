@@ -1,35 +1,117 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from '../assets/logo.png'
 
 const Register = () => {
+
+  const navigate = useNavigate();
+
+  const [form, setForm] = React.useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: form.username,
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Registration failed");
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-page">
       <img className="userCredLogo" src={Logo} alt="logo" />
       <div className="login-box">
         <h2>Register</h2>
-        <form className="userF">
-          <div className="form-group">
+        <form className="userF" onSubmit={handleSubmit}>
+        <div className="form-group">
             <label>Username</label>
-            <input type="text" placeholder="Enter your username" required />
+            <input
+              name="username"
+              type="text"
+              placeholder="Enter your username"
+              value={form.username}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Email</label>
-            <input type="email" placeholder="Enter your email" required />
+            <input
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input type="password" placeholder="Enter your password" required />
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Confirm Password</label>
             <input
+              name="confirmPassword"
               type="password"
               placeholder="Confirm your password"
+              value={form.confirmPassword}
+              onChange={handleChange}
               required
             />
           </div>
-          <button type="submit">Sign Up</button>
+          {error && <p className="error-message">{error}</p>}
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing Up..." : "Sign Up"}
+          </button>
         </form>
         <p className="register-link">
           Already have an account? <Link to="/login">Login</Link>

@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppContent = () => {
   const location = useLocation();
@@ -17,12 +18,21 @@ const AppContent = () => {
       {!hideNavbar && <Navbar />}
       <div className="container">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/list" element={<List />} />
-          <Route path="/create" element={<Create />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/list" element={<List />} />
+                  <Route path="/create" element={<Create />} />
+                  <Route path="/profile" element={<Profile />} />
+                </Routes>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </>
