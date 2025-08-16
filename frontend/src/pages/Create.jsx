@@ -30,19 +30,19 @@ const Create = () => {
           },
         }
       );
-    
-      console.log(res.data);
-    
+
+      // console.log(res.data);
+
       alert("Task created successfully!");
       setTitle("");
       setDescription("");
       setDueDate("");
       setPriority("");
     } catch (err) {
-      console.error("Error:", err.response?.data || err.message);
+      // console.error("Error:", err.response?.data || err.message);
       alert(err.response?.data?.message || "Failed to create task");
     }
-    
+
   };
 
 

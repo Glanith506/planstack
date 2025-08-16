@@ -125,13 +125,14 @@ const Card = ({ id, typeIcon, title, description, dueDate, status, priority, pin
           <div style={{ display: "flex", gap: "5px" }}>
             {typeIcon === "Edit" && (
               <>
-                <img
-                  src={task.pin ? Unpin : Pin}
-                  alt={task.pin ? "Unpin" : "Pin"}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => checkType("Pin")}
-                />
-
+                {task.status !== "Completed" && (
+                  <img
+                    src={task.pin ? Unpin : Pin}
+                    alt={task.pin ? "Unpin" : "Pin"}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => checkType("Pin")}
+                  />
+                )}
                 <img
                   src={Delete}
                   alt="icon"
