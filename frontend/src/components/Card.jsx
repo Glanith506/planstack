@@ -3,11 +3,13 @@ import "../styles/card.css";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import Delete from '../assets/delete.svg'
+import Pin from '../assets/pinwhite.svg'
+import Unpin from '../assets/unpin.svg'
 
-const Card = ({ id, typeIcon, title, description, dueDate, status, priority, color, icon, onStatusChange }) => {
+const Card = ({ id, typeIcon, title, description, dueDate, status, priority, pin, color, icon, onStatusChange }) => {
 
   const [editShow, setEditShow] = React.useState(false);
-  const [task, setTask] = React.useState({ title, description, dueDate, status, priority });
+  const [task, setTask] = React.useState({ title, description, dueDate, status, priority, pin });
   const [editTask, setEditTask] = React.useState({
     title,
     description,
@@ -41,7 +43,11 @@ const Card = ({ id, typeIcon, title, description, dueDate, status, priority, col
       } catch (err) {
         console.error("Error updating task status:", err.response?.data || err.message);
       }
-    } else if (typeIcon === "Delete") {
+    }
+    else if (typeIcon === "Delete") {
+      const confirmDelete = window.confirm("Are you sure you want to delete this task?");
+      if (!confirmDelete) return;
+
       try {
         const token = localStorage.getItem("token");
         await axios.delete(
@@ -56,6 +62,29 @@ const Card = ({ id, typeIcon, title, description, dueDate, status, priority, col
         if (onStatusChange) onStatusChange(id, "delete");
       } catch (err) {
         console.error("Error deleting task:", err.response?.data || err.message);
+      }
+    }
+    else if (typeIcon === "Pin") {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.patch(
+          `${import.meta.env.VITE_API_URL}/tasks/${id}`,
+          { pin: !task.pin },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setTask((prev) => ({ ...prev, pin: res.data.task.pin }));
+
+        // if (onStatusChange) onStatusChange(id, "pin", res.data.task.pin);
+
+      } catch (err) {
+        // console.error("Error updating task pin:", err.response?.data || err.message);
+        alert(err.response?.data?.message || "Error updating task pin");
       }
     }
   };
@@ -95,12 +124,21 @@ const Card = ({ id, typeIcon, title, description, dueDate, status, priority, col
           <h3 className="card-title">{title}</h3>
           <div style={{ display: "flex", gap: "5px" }}>
             {typeIcon === "Edit" && (
-              <img
-                src={Delete}
-                alt="icon"
-                style={{ cursor: "pointer" }}
-                onClick={() => checkType("Delete")}
-              />
+              <>
+                <img
+                  src={task.pin ? Unpin : Pin}
+                  alt={task.pin ? "Unpin" : "Pin"}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => checkType("Pin")}
+                />
+
+                <img
+                  src={Delete}
+                  alt="icon"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => checkType("Delete")}
+                />
+              </>
             )}
             <img
               src={icon}

@@ -48,7 +48,7 @@ const Home = () => {
         <span>Pinned Task</span>
         <img src={Pin} alt="pin" />
       </div>
-     <div style={{ display: "flex", gap: "38px", justifyContent: "center", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: "38px", justifyContent: "center", flexWrap: "wrap" }}>
         {pinnedTasks.length > 0 ? (
           pinnedTasks.map(task => (
             <Card
@@ -60,6 +60,7 @@ const Home = () => {
               status={task.status}
               color="blue"
               priority={task.priority}
+              pin={task.pin}
               icon={Check}
               typeIcon="Check"
               onStatusChange={handleTaskCompleted}
@@ -73,8 +74,8 @@ const Home = () => {
         <span>Task List</span>
         <img src={Task} alt="task" />
       </div>
-     <div style={{ display: "flex", gap: "38px", justifyContent: "center", flexWrap: "wrap" }}>
-     {tasks.length > 0 ? (
+      <div style={{ display: "flex", gap: "38px", justifyContent: "center", flexWrap: "wrap" }}>
+        {tasks.length > 0 ? (
           tasks.map(task => (
             <Card
               key={task._id}
@@ -87,10 +88,11 @@ const Home = () => {
                 task.priority === "High"
                   ? "red"
                   : task.priority === "Medium"
-                  ? "orange"
-                  : "gray"
+                    ? "orange"
+                    : "gray"
               }
               priority={task.priority}
+              pin={task.pin}
               icon={Check}
               typeIcon="Check"
               onStatusChange={handleTaskCompleted}

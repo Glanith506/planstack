@@ -48,12 +48,25 @@ router.patch("/:id", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
+    if (pin === true && task.pin === false) {
+      const pinnedCount = await Task.countDocuments({ userId: req.userId, pin: true });
+      if (pinnedCount >= 3) {
+        return res.status(400).json({ message: "You can only pin up to 3 tasks." });
+      }
+    }
+
     if (status !== undefined) task.status = status;
     if (title !== undefined) task.title = title;
     if (description !== undefined) task.description = description;
     if (dueDate !== undefined) task.dueDate = dueDate;
     if (priority !== undefined) task.priority = priority;
     if (pin !== undefined) task.pin = pin;
+
+    if (status === "Completed") {
+      task.pin = false;
+    } else if (pin !== undefined) {
+      task.pin = pin;
+    }
 
     await task.save();
 

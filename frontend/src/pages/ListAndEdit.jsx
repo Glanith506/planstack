@@ -65,6 +65,7 @@ const ListAndEdit = () => {
                 status={task.status}
                 color="blue"
                 priority={task.priority}
+                pin={task.pin}
                 icon={Edit}
                 typeIcon="Edit"
                 onStatusChange={handleTaskChange}
