@@ -80,7 +80,7 @@ const Create = () => {
           onChange={(e) => setPriority(e.target.value)}
           required
         >
-          <option value="">Choose your priority</option>
+          <option value="" disabled>Choose your priority</option>
           <option value="High">High</option>
           <option value="Medium">Medium</option>
           <option value="Low">Low</option>

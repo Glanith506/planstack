@@ -36,10 +36,15 @@ const ListAndEdit = () => {
     fetchTasks();
   }, []);
 
-
-  if (loading) {
-    return <p style={{ textAlign: "center" }}>Loading tasks...</p>;
-  }
+  const handleTaskChange = (data, action) => {
+    if (action === "delete") {
+      setTasks(prev => prev.filter(task => task._id !== data));
+    } else {
+      setTasks(prev =>
+        prev.map(task => (task._id === data._id ? data : task))
+      );
+    }
+  };
 
   return (
     <>
@@ -48,22 +53,28 @@ const ListAndEdit = () => {
         <img src={Task} alt="task" />
       </div>
       <div style={{ display: "flex", gap: "38px", justifyContent: "center", flexWrap: "wrap" }}>
-        {tasks.length > 0 ? (
-          tasks.map((task) => (
-            <Card
-              key={task._id}
-              id={task._id}
-              title={task.title}
-              description={task.description}
-              dueDate={new Date(task.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-              status={task.status}
-              color="blue"
-              icon={Edit}
-              typeIcon="Edit"
-            />
-          ))
+        {!loading ? (
+          tasks.length > 0 ? (
+            tasks.map((task) => (
+              <Card
+                key={task._id}
+                id={task._id}
+                title={task.title}
+                description={task.description}
+                dueDate={new Date(task.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                status={task.status}
+                color="blue"
+                priority={task.priority}
+                icon={Edit}
+                typeIcon="Edit"
+                onStatusChange={handleTaskChange}
+              />
+            ))
+          ) : (
+            <p>No tasks found</p>
+          )
         ) : (
-          <p>No tasks found</p>
+          <p className='emptyText'>Loading...</p>
         )}
       </div>
     </>

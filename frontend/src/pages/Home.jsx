@@ -20,11 +20,12 @@ const Home = () => {
           },
         });
 
-        const pinned = res.data.filter(task => task.pin === true);
-        const normal = res.data.filter(task => task.pin !== true);
+        const activeTasks = res.data.filter(task => task.status !== "Completed");
+        const pinned = activeTasks.filter(task => task.pin === true);
+        const normal = activeTasks.filter(task => task.pin !== true);
 
-        console.log(pinned);
-        console.log(normal);
+        // console.log(pinned);
+        // console.log(normal);
 
         setPinnedTasks(pinned);
         setTasks(normal);
@@ -36,6 +37,10 @@ const Home = () => {
     fetchTasks();
   }, []);
 
+  const handleTaskCompleted = (taskId) => {
+    setPinnedTasks(prev => prev.filter(task => task._id !== taskId));
+    setTasks(prev => prev.filter(task => task._id !== taskId));
+  };
 
   return (
     <>
@@ -54,8 +59,10 @@ const Home = () => {
               dueDate={new Date(task.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
               status={task.status}
               color="blue"
+              priority={task.priority}
               icon={Check}
               typeIcon="Check"
+              onStatusChange={handleTaskCompleted}
             />
           ))
         ) : (
@@ -83,8 +90,10 @@ const Home = () => {
                   ? "orange"
                   : "gray"
               }
+              priority={task.priority}
               icon={Check}
               typeIcon="Check"
+              onStatusChange={handleTaskCompleted}
             />
           ))
         ) : (

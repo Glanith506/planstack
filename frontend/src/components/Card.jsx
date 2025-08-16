@@ -1,18 +1,86 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import "../styles/card.css";
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+import Delete from '../assets/delete.svg'
 
-const Card = ({ id, typeIcon, title, description, dueDate, status, color, icon }) => {
+const Card = ({ id, typeIcon, title, description, dueDate, status, priority, color, icon, onStatusChange }) => {
 
   const [editShow, setEditShow] = React.useState(false);
+  const [task, setTask] = React.useState({ title, description, dueDate, status, priority });
+  const [editTask, setEditTask] = React.useState({
+    title,
+    description,
+    dueDate,
+    status,
+    priority
+  });
 
-  const checkType = (typeIcon) => {
+  const nav = useNavigate();
+
+  const checkType = async (typeIcon) => {
     if (typeIcon === "Edit") {
       setEditShow(true);
-      console.log("Edit");
     }
     else if (typeIcon === "Check") {
-      console.log("Completed");
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.patch(
+          `${import.meta.env.VITE_API_URL}/tasks/${id}`,
+          { status: "Completed" },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // console.log("Task completed:", res.data);
+        if (onStatusChange) onStatusChange(id);
+      } catch (err) {
+        console.error("Error updating task status:", err.response?.data || err.message);
+      }
+    } else if (typeIcon === "Delete") {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/tasks/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (onStatusChange) onStatusChange(id, "delete");
+      } catch (err) {
+        console.error("Error deleting task:", err.response?.data || err.message);
+      }
+    }
+  };
+
+  const onSubmitEdit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/tasks/${id}`,
+        editTask,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // console.log("Task updated:", res.data);
+      setTask(res.data);
+      setEditShow(false);
+      if (onStatusChange) onStatusChange(res.data, "update");
+      nav('/');
+    } catch (err) {
+      console.error("Error updating task:", err.response?.data || err.message);
     }
   };
 
@@ -25,12 +93,22 @@ const Card = ({ id, typeIcon, title, description, dueDate, status, color, icon }
       <div className={`card ${color}`}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h3 className="card-title">{title}</h3>
-          <img
-            src={icon}
-            alt="icon"
-            style={{ cursor: "pointer" }}
-            onClick={() => checkType(typeIcon)}
-          />
+          <div style={{ display: "flex", gap: "5px" }}>
+            {typeIcon === "Edit" && (
+              <img
+                src={Delete}
+                alt="icon"
+                style={{ cursor: "pointer" }}
+                onClick={() => checkType("Delete")}
+              />
+            )}
+            <img
+              src={icon}
+              alt="icon"
+              style={{ cursor: "pointer" }}
+              onClick={() => checkType(typeIcon)}
+            />
+          </div>
         </div>
         <p className="card-description">{description}</p>
         <div className="card-footer">
@@ -65,45 +143,48 @@ const Card = ({ id, typeIcon, title, description, dueDate, status, color, icon }
             <label>Title:</label>
             <input
               type="text"
-            // value={task.title}
-            // onChange={(e) => setTask({ ...task, title: e.target.value })}
+              value={editTask.title}
+              onChange={(e) => setEditTask({ ...editTask, title: e.target.value })}
             />
 
             <label>Description:</label>
             <textarea
-            // value={task.description}
-            // onChange={(e) => setTask({ ...task, description: e.target.value })}
+              value={editTask.description}
+              onChange={(e) => setEditTask({ ...editTask, description: e.target.value })}
             ></textarea>
 
             <label>Due Date:</label>
             <input
               type="date"
-            // value={task.dueDate}
-            // onChange={(e) => setTask({ ...task, dueDate: e.target.value })}
+              value={editTask.dueDate}
+              onChange={(e) => setEditTask({ ...editTask, dueDate: e.target.value })}
             />
 
             <label>Status:</label>
-            <input
-              type="text"
-            // value={task.status}
-            // onChange={(e) => setTask({ ...task, status: e.target.value })}
-            />
+            <select
+              value={editTask.status}
+              onChange={(e) => setEditTask({ ...editTask, status: e.target.value })}
+            >
+              <option value="" disabled>Choose your status</option>
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+            </select>
 
             <label>Priority:</label>
             <select
-            // value={task.priority}
-            // onChange={(e) => setTask({ ...task, priority: e.target.value })}
+              value={editTask.priority}
+              onChange={(e) => setEditTask({ ...editTask, priority: e.target.value })}
             >
-              <option value="">Choose your priority</option>
+              <option value="" disabled>Choose your priority</option>
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
             </select>
 
-            <div style={{display:"flex", alignItems:'center', justifyContent: "center"}}>
+            <div style={{ display: "flex", alignItems: 'center', justifyContent: "center" }}>
               <button
-              // onClick={onSubmit}
-              className='editBtn'
+                className='editBtn'
+                onClick={onSubmitEdit}
               >
                 Edit
               </button>
