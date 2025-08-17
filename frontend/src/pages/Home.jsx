@@ -67,7 +67,7 @@ const Home = () => {
             />
           ))
         ) : (
-          <p className='emptyText'>No pinned tasks</p>
+          <p className='emptyText'>No pinned tasks found</p>
         )}
       </div>
       <div className='task'>
