@@ -8,7 +8,7 @@ const signToken = (userId) =>
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    console.log("Register attempt:", { username, email, password });
+    // console.log("Register attempt:", { username, email, password });
     if (!username || !email || !password)
       return res.status(400).json({ message: "All fields are required." });
 
@@ -16,9 +16,9 @@ exports.register = async (req, res) => {
     if (existing) return res.status(409).json({ message: "Email already in use." });
 
     const hash = await bcrypt.hash(password, 10);
-    console.log("Generated hash for password:", password, "is:", hash);
+    // console.log("Generated hash for password:", password, "is:", hash);
     const user = await User.create({ username, email: email.toLowerCase(), password: hash });
-    console.log("Saved user:", user);
+    // console.log("Saved user:", user);
 
     const token = signToken(user._id);
     const { password: _, ...userData } = user.toObject();
