@@ -79,7 +79,7 @@ const ListAndEdit = () => {
                 />
               ))}
               {completedTasks.length > 0 && (
-                <div style={{ width: "100%", marginTop: "40px" }}>
+                <div style={{ width: "100%", marginTop: "40px", marginBottom: "50px" }}>
                   <div className='task' style={{ marginTop: "0px" }}>
                     <span>Completed Task</span>
                     <img src={Task} alt="task" />
