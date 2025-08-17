@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-const COLORS_COMPLETION = ["#4CAF50", "#F44336"]; // Green, Red
-const COLORS_PRIORITY = ["#E53935", "#FFB300", "#43A047"]; // Red, Yellow, Green
+const COLORS_COMPLETION = ["#4CAF50", "#F44336"];
+const COLORS_PRIORITY = ["#dc2626", "#f59e0b", "#16a34a"];
 
 const Profile = () => {
 
