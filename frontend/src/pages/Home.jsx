@@ -30,7 +30,7 @@ const Home = () => {
         setPinnedTasks(pinned);
         setTasks(normal);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        console.error("Error in fetching Tasks:", error);
       }
     };
 
